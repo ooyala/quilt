@@ -10,13 +10,14 @@
       "email" : "jigish@ooyala.com"
     }
   ],
-  "main": "./lib/stitcher",
+  "main": "./lib/quilt",
   "repository" : {
     "type" : "git",
-    "url" : "https://github.com/ooyala/node-stitcher.git"
+    "url" : "https://github.com/ooyala/quilt.git"
   },
   "keywords" : [
-    "stitch"
+    "stitch",
+    "stitcher"
   ],
   "dependencies": {
     "underscore": "*"
@@ -28,6 +29,6 @@
   ],
   "license" : "MIT",
   "engine" : {
-    "node" : ">=0.4"
+    "node" : "*"
   }
 }
