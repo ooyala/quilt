@@ -1,0 +1,33 @@
+{
+  "name": "stitcher",
+  "preferGlobal" : false,
+  "version": "0.0.1",
+  "author" : "Ooyala <x-device-team@ooyala.com>",
+  "description" : "File stitcher",
+  "contributors" : [
+    {
+      "name" : "Jigish Patel",
+      "email" : "jigish@ooyala.com"
+    }
+  ],
+  "main": "./lib/stitcher",
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/ooyala/node-stitcher.git"
+  },
+  "keywords" : [
+    "stitch"
+  ],
+  "dependencies": {
+    "underscore": "*"
+  },
+  "noAnalyze" : true,
+  "devDependencies" : {
+  },
+  "bundleDependencies" : [
+  ],
+  "license" : "MIT",
+  "engine" : {
+    "node" : ">=0.4"
+  }
+}
