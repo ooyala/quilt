@@ -1,5 +1,9 @@
-var quilt = require("../lib/quilt.js");
+var quilt = process.env.QUILT_COV ?
+             require("../lib-cov/quilt.js") :
+             require("../lib/quilt.js");
 var expect = require("expect.js");
+
+var noop = function(){};
 
 describe('quilt', function() {
   before(function() {
@@ -22,7 +26,7 @@ describe('quilt', function() {
     it('should throw an exception if no config hash is specified', function() {
       var error = null;
       try {
-        var myQuilt = quilt.create();
+        var myQuilt = quilt.create(null, noop, noop);
       } catch (err) {
         error = err;
       }
@@ -32,7 +36,7 @@ describe('quilt', function() {
     it('should throw an exception if no local_path is specified', function() {
       var error = null;
       try {
-        var myQuilt = quilt.create({});
+        var myQuilt = quilt.create({}, noop, noop);
       } catch (err) {
         error = err;
       }
@@ -42,7 +46,7 @@ describe('quilt', function() {
     it('should create a quilt', function() {
       var error = null;
       try {
-        var myQuilt = quilt.create({ "local_path" : __dirname + "/fake_project" });
+        var myQuilt = quilt.create({ "local_path" : __dirname + "/fake_project" }, noop, noop);
         expect(myQuilt).to.be.an('object');
         expect(myQuilt.stitch).to.be.a('function');
       } catch (err) {
@@ -56,8 +60,8 @@ describe('quilt', function() {
     var myQuilt = null;
     var myNoRemoteQuilt = null;
     before(function() {
-      myQuilt = quilt.create({ "local_path" : __dirname + "/fake_project" });
-      myNoRemoteQuilt = quilt.create({ "local_path" : __dirname + "/fake_project" });
+      myQuilt = quilt.create({ "local_path" : __dirname + "/fake_project" }, noop, noop);
+      myNoRemoteQuilt = quilt.create({ "local_path" : __dirname + "/fake_project" }, noop, noop);
     });
 
     after(function() {
