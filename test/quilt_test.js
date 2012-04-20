@@ -347,29 +347,33 @@ describe('quilt', function() {
       });
 
       it('should return empty for a non-existant version when no remote information exists', function(done) {
-        myNoRemoteQuilt.stitch(["0"], "2.0.0", function(stitched) {
+        myNoRemoteQuilt.stitch(["0"], "2.0.0", function(stitched, error) {
           expect(stitched).to.be('');
+          expect(error).not.to.be(null);
           done();
         });
       });
 
       it('should properly stitch for an existing version with selector array', function(done) {
-        myNoRemoteQuilt.stitch(["0"], "1.0.0", function(stitched) {
+        myNoRemoteQuilt.stitch(["0"], "1.0.0", function(stitched, error) {
           expect(stitched).to.be('h\nc\n8\n0\nf1.0.0\n');
+          expect(error).to.be(null);
           done();
         });
       });
 
       it('should properly stitch for an existing version with selector function', function(done) {
-        myNoRemoteQuilt.stitch(function() { return true; }, "1.0.0", function(stitched) {
+        myNoRemoteQuilt.stitch(function() { return true; }, "1.0.0", function(stitched, error) {
           expect(stitched).to.be('h\nc\n8\n0\n7\n9\n1\n2\n3\n4\n5\n6\nf1.0.0\n');
+          expect(error).to.be(null);
           done();
         });
       });
 
       it('should properly stitch for remote version with selector array', function(done) {
-        myQuilt.stitch(["0"], "2.0.0", function(stitched) {
+        myQuilt.stitch(["0"], "2.0.0", function(stitched, error) {
           expect(stitched).to.be('h\nc\n8\n0\nf2.0.0\n');
+          expect(error).to.be(null);
           exec("rm -rf "+__dirname+"/fake_project/2.0.0", function(e, stdo, stde){});
           done();
         });
