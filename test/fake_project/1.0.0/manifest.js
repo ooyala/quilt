@@ -2,7 +2,7 @@ module.exports = {
   "header": "./h.js",
   "footer": "./f.js",
   "common": [
-    "./common/c.js",
+    "./common/c.js"
   ],
   "optional": {
     "./optional/0.js": [ "8" ],
@@ -14,6 +14,6 @@ module.exports = {
     "./6.js": [],
     "./7.js": [],
     "./8.js": [],
-    "./9.js": [],
+    "./9.js": []
   }
 };
