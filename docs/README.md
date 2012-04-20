@@ -51,6 +51,8 @@ Quilt is a simple way to stitch files together.
 
 where each `<module file>` will point to a module to stitch. the filename should be `<module name>.js`
 
+- - -
+
 ### `remote_path` ###
 
 **Note:** This is optional.
