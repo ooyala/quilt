@@ -49,7 +49,16 @@ Quilt is a simple way to stitch files together.
       }
     };
 
-where each `<module file>` will point to a module to stitch. The filename should be `<module name>.js`
+Where each `<module file>` will point to a module to stitch. The filename should be `<module name>.js`
+
+The modules will be stitched in the following order:
+
+    header
+    common (in the order they were present in the array)
+    optional (the only ordering that is guarenteed is: dependancies will be before their dependant modules)
+    footer
+
+Circular dependancies will be shortcircuited and an error message will be sent to `console.error`.
 
 - - -
 
