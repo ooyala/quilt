@@ -1,6 +1,7 @@
 var quilt = process.env.QUILT_COV ?
              require("../lib-cov/quilt.js") :
              require("../lib/quilt.js");
+var Quilt = quilt.Quilt;
 var expect = require("expect.js");
 var exec = require("child_process").exec;
 
@@ -80,56 +81,56 @@ describe('quilt', function() {
       });
 
       it('should be a function', function() {
-        expect(myQuilt.moduleNameFromFileName).to.be.a('function');
+        expect(Quilt.moduleNameFromFileName).to.be.a('function');
       });
 
       it('should return null for bad file names', function() {
-        var name = myQuilt.moduleNameFromFileName();
+        var name = Quilt.moduleNameFromFileName();
         expect(name).to.be(null);
-        name = myQuilt.moduleNameFromFileName(null);
+        name = Quilt.moduleNameFromFileName(null);
         expect(name).to.be(null);
-        name = myQuilt.moduleNameFromFileName(undefined);
+        name = Quilt.moduleNameFromFileName(undefined);
         expect(name).to.be(null);
-        name = myQuilt.moduleNameFromFileName("");
+        name = Quilt.moduleNameFromFileName("");
         expect(name).to.be(null);
-        name = myQuilt.moduleNameFromFileName("hello");
+        name = Quilt.moduleNameFromFileName("hello");
         expect(name).to.be(null);
-        name = myQuilt.moduleNameFromFileName("/hello");
+        name = Quilt.moduleNameFromFileName("/hello");
         expect(name).to.be(null);
-        name = myQuilt.moduleNameFromFileName("./hello");
+        name = Quilt.moduleNameFromFileName("./hello");
         expect(name).to.be(null);
-        name = myQuilt.moduleNameFromFileName("hello/hello");
+        name = Quilt.moduleNameFromFileName("hello/hello");
         expect(name).to.be(null);
-        name = myQuilt.moduleNameFromFileName("/hello/hello");
+        name = Quilt.moduleNameFromFileName("/hello/hello");
         expect(name).to.be(null);
-        name = myQuilt.moduleNameFromFileName("./hello/hello");
+        name = Quilt.moduleNameFromFileName("./hello/hello");
         expect(name).to.be(null);
-        name = myQuilt.moduleNameFromFileName("hello.json");
+        name = Quilt.moduleNameFromFileName("hello.json");
         expect(name).to.be(null);
-        name = myQuilt.moduleNameFromFileName("/hello.json");
+        name = Quilt.moduleNameFromFileName("/hello.json");
         expect(name).to.be(null);
-        name = myQuilt.moduleNameFromFileName("./hello.json");
+        name = Quilt.moduleNameFromFileName("./hello.json");
         expect(name).to.be(null);
-        name = myQuilt.moduleNameFromFileName("hello/hello.json");
+        name = Quilt.moduleNameFromFileName("hello/hello.json");
         expect(name).to.be(null);
-        name = myQuilt.moduleNameFromFileName("/hello/hello.json");
+        name = Quilt.moduleNameFromFileName("/hello/hello.json");
         expect(name).to.be(null);
-        name = myQuilt.moduleNameFromFileName("./hello/hello.json");
+        name = Quilt.moduleNameFromFileName("./hello/hello.json");
         expect(name).to.be(null);
       });
 
       it('should return a valid name for good file names', function() {
-        var name = myQuilt.moduleNameFromFileName("hello.js");
+        var name = Quilt.moduleNameFromFileName("hello.js");
         expect(name).to.be("hello");
-        name = myQuilt.moduleNameFromFileName("/hello.js");
+        name = Quilt.moduleNameFromFileName("/hello.js");
         expect(name).to.be("hello");
-        name = myQuilt.moduleNameFromFileName("./hello.js");
+        name = Quilt.moduleNameFromFileName("./hello.js");
         expect(name).to.be("hello");
-        name = myQuilt.moduleNameFromFileName("hello/hello.js");
+        name = Quilt.moduleNameFromFileName("hello/hello.js");
         expect(name).to.be("hello");
-        name = myQuilt.moduleNameFromFileName("/hello/hello.js");
+        name = Quilt.moduleNameFromFileName("/hello/hello.js");
         expect(name).to.be("hello");
-        name = myQuilt.moduleNameFromFileName("./hello/hello.js");
+        name = Quilt.moduleNameFromFileName("./hello/hello.js");
         expect(name).to.be("hello");
       });
     });
@@ -142,34 +143,34 @@ describe('quilt', function() {
       });
 
       it('should be a function', function() {
-        expect(myQuilt.moduleFromConfigHash).to.be.a('function');
+        expect(Quilt.moduleFromConfigHash).to.be.a('function');
       });
 
       it('should return null if the module does not exist', function() {
-        var module = myQuilt.moduleFromConfigHash("randomjunk", [], "morerandomjunk");
+        var module = Quilt.moduleFromConfigHash("randomjunk", [], "morerandomjunk");
         expect(module).to.be(null);
       });
 
       it('should return the module if the module does exist', function() {
-        var module = myQuilt.moduleFromConfigHash("optional/0.js", ["1"], __dirname + "/fake_project/1.0.0/");
+        var module = Quilt.moduleFromConfigHash("optional/0.js", ["1"], __dirname + "/fake_project/1.0.0/");
         expect(module).not.to.be(null);
         expect(module.dependancies).to.eql(["1"]);
         expect(module.module).to.be("0\n");
       });
 
       it('should handle relative and non-relative filenames', function() {
-        var module = myQuilt.moduleFromConfigHash("optional/0.js", [], __dirname + "/fake_project/1.0.0/");
+        var module = Quilt.moduleFromConfigHash("optional/0.js", [], __dirname + "/fake_project/1.0.0/");
         expect(module).not.to.be(null);
-        module = myQuilt.moduleFromConfigHash("1.js", [], __dirname + "/fake_project/1.0.0/");
+        module = Quilt.moduleFromConfigHash("1.js", [], __dirname + "/fake_project/1.0.0/");
         expect(module).not.to.be(null);
-        module = myQuilt.moduleFromConfigHash("./optional/0.js", [], __dirname + "/fake_project/1.0.0/");
+        module = Quilt.moduleFromConfigHash("./optional/0.js", [], __dirname + "/fake_project/1.0.0/");
         expect(module).not.to.be(null);
-        module = myQuilt.moduleFromConfigHash("./1.js", [], __dirname + "/fake_project/1.0.0/");
+        module = Quilt.moduleFromConfigHash("./1.js", [], __dirname + "/fake_project/1.0.0/");
         expect(module).not.to.be(null);
       });
 
       it('should handle a single dependancy as a string', function() {
-        var module = myQuilt.moduleFromConfigHash("optional/0.js", "1", __dirname + "/fake_project/1.0.0/");
+        var module = Quilt.moduleFromConfigHash("optional/0.js", "1", __dirname + "/fake_project/1.0.0/");
         expect(module).not.to.be(null);
         expect(module.dependancies).to.eql(["1"]);
         expect(module.module).to.be("0\n");
@@ -184,16 +185,16 @@ describe('quilt', function() {
       });
 
       it('should be a function', function() {
-        expect(myQuilt.loadVersion).to.be.a('function');
+        expect(Quilt.loadVersion).to.be.a('function');
       });
 
       it('should return null if there is no manifest', function() {
-        var version = myQuilt.loadVersion(__dirname, "fake_project");
+        var version = Quilt.loadVersion(__dirname, "fake_project");
         expect(version).to.be(null);
       })
 
       it('should return a version', function() {
-        var version = myQuilt.loadVersion(__dirname + "/fake_project", "1.0.0");
+        var version = Quilt.loadVersion(__dirname + "/fake_project", "1.0.0");
         expect(version).not.to.be(null);
         expect(version.manifest).not.to.be(null);
         expect(version.base).to.be("h\nc\n");
