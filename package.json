@@ -1,34 +1,39 @@
 {
   "name": "quilt",
-  "preferGlobal" : false,
+  "preferGlobal": false,
   "version": "0.0.1",
-  "author" : "Ooyala <x-device-team@ooyala.com>",
-  "description" : "File stitcher",
-  "contributors" : [
+  "author": "Ooyala <x-device-team@ooyala.com>",
+  "description": "File stitcher",
+  "contributors": [
     {
-      "name" : "Jigish Patel",
-      "email" : "jigish@ooyala.com"
+      "name": "Jigish Patel",
+      "email": "jigish@ooyala.com"
     }
   ],
-  "main": "./lib/quilt",
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/ooyala/quilt.git"
+  "scripts": {
+    "test": "make test"
   },
-  "keywords" : [
+  "main": "./lib/quilt",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ooyala/quilt.git"
+  },
+  "keywords": [
     "stitch",
     "stitcher"
   ],
   "dependencies": {
     "underscore": "*"
   },
-  "noAnalyze" : true,
-  "devDependencies" : {
+  "noAnalyze": true,
+  "devDependencies": {
+    "mocha": "*",
+    "expect.js": "*"
   },
-  "bundleDependencies" : [
+  "bundleDependencies": [
   ],
-  "license" : "MIT",
-  "engine" : {
-    "node" : "*"
+  "license": "MIT",
+  "engine": {
+    "node": "*"
   }
 }
