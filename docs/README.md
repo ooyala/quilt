@@ -1,8 +1,6 @@
 # About Quilt #
 
-Quilt is a simple way to stitch files together.
-
-[github](http://github.com/ooyala/quilt)
+Quilt is a simple way to stitch files together. [Quilt on github](http://github.com/ooyala/quilt).
 
 # Installation #
 
