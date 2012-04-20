@@ -2,6 +2,7 @@ var quilt = process.env.QUILT_COV ?
              require("../lib-cov/quilt.js") :
              require("../lib/quilt.js");
 var expect = require("expect.js");
+var exec = require("child_process").exec;
 
 var noop = function(){};
 
@@ -60,7 +61,11 @@ describe('quilt', function() {
     var myQuilt = null;
     var myNoRemoteQuilt = null;
     before(function() {
-      myQuilt = quilt.create({ "local_path" : __dirname + "/fake_project" }, noop, noop);
+      myQuilt = quilt.create({
+        "local_path" : __dirname + "/fake_project",
+        "remote_host" : "localhost",
+        "remote_path" : "/projects"
+      }, noop, noop);
       myNoRemoteQuilt = quilt.create({ "local_path" : __dirname + "/fake_project" }, noop, noop);
     });
 
@@ -204,7 +209,7 @@ describe('quilt', function() {
           "8" : { "dependancies" : [], "module" : "8\n" },
           "9" : { "dependancies" : [], "module" : "9\n" },
         });
-        expect(version.footer).to.be("f\n");
+        expect(version.footer).to.be("f1.0.0\n");
       });
     });
 
@@ -279,30 +284,54 @@ describe('quilt', function() {
         expect(version).to.be(null);
       });
 
-      it('should return version if it exists', function() {
+      it('should return version if it exists', function(done) {
         var version = {};
         myNoRemoteQuilt.getVersion('1.0.0', function(theVersion) {
           version = theVersion;
+          expect(version).not.to.be(null);
+          expect(version.manifest).not.to.be(null);
+          expect(version.base).to.be("h\nc\n");
+          expect(version.modules).to.eql({
+            "0" : { "dependancies" : [ "8" ], "module" : "0\n" },
+            "1" : { "dependancies" : [ "7", "9" ], "module" : "1\n" },
+            "2" : { "dependancies" : [ "8" ], "module" : "2\n" },
+            "3" : { "dependancies" : [], "module" : "3\n" },
+            "4" : { "dependancies" : [], "module" : "4\n" },
+            "5" : { "dependancies" : [], "module" : "5\n" },
+            "6" : { "dependancies" : [], "module" : "6\n" },
+            "7" : { "dependancies" : [], "module" : "7\n" },
+            "8" : { "dependancies" : [], "module" : "8\n" },
+            "9" : { "dependancies" : [], "module" : "9\n" },
+          });
+          expect(version.footer).to.be("f1.0.0\n");
+          done();
         });
-        expect(version).not.to.be(null);
-        expect(version.manifest).not.to.be(null);
-        expect(version.base).to.be("h\nc\n");
-        expect(version.modules).to.eql({
-          "0" : { "dependancies" : [ "8" ], "module" : "0\n" },
-          "1" : { "dependancies" : [ "7", "9" ], "module" : "1\n" },
-          "2" : { "dependancies" : [ "8" ], "module" : "2\n" },
-          "3" : { "dependancies" : [], "module" : "3\n" },
-          "4" : { "dependancies" : [], "module" : "4\n" },
-          "5" : { "dependancies" : [], "module" : "5\n" },
-          "6" : { "dependancies" : [], "module" : "6\n" },
-          "7" : { "dependancies" : [], "module" : "7\n" },
-          "8" : { "dependancies" : [], "module" : "8\n" },
-          "9" : { "dependancies" : [], "module" : "9\n" },
-        });
-        expect(version.footer).to.be("f\n");
       });
 
-      // TODO[jigish] test remote!
+      it('should fetch remote version if it does not exist locally', function(done) {
+        var version = {};
+        myQuilt.getVersion('2.0.0', function(theVersion) {
+          version = theVersion;
+          expect(version).not.to.be(null);
+          expect(version.manifest).not.to.be(null);
+          expect(version.base).to.be("h\nc\n");
+          expect(version.modules).to.eql({
+            "0" : { "dependancies" : [ "8" ], "module" : "0\n" },
+            "1" : { "dependancies" : [ "7", "9" ], "module" : "1\n" },
+            "2" : { "dependancies" : [ "8" ], "module" : "2\n" },
+            "3" : { "dependancies" : [], "module" : "3\n" },
+            "4" : { "dependancies" : [], "module" : "4\n" },
+            "5" : { "dependancies" : [], "module" : "5\n" },
+            "6" : { "dependancies" : [], "module" : "6\n" },
+            "7" : { "dependancies" : [], "module" : "7\n" },
+            "8" : { "dependancies" : [], "module" : "8\n" },
+            "9" : { "dependancies" : [], "module" : "9\n" },
+          });
+          expect(version.footer).to.be("f2.0.0\n");
+          exec("rm -rf "+__dirname+"/fake_project/2.0.0", function(e, stdo, stde){});
+          done();
+        });
+      });
     });
 
     describe('stitch', function() {
@@ -312,29 +341,39 @@ describe('quilt', function() {
       after(function() {
       });
 
-      it('should be a function', function() {
+      it('should be a function', function(done) {
         expect(myQuilt.stitch).to.be.a('function');
+        done();
       });
 
-      it('should return empty for a non-existant version when no remote information exists', function() {
-        var stitched = null;
-        myNoRemoteQuilt.stitch(["0"], "2.0.0", function(theString) { stitched = theString; });
-        expect(stitched).to.be('');
+      it('should return empty for a non-existant version when no remote information exists', function(done) {
+        myNoRemoteQuilt.stitch(["0"], "2.0.0", function(stitched) {
+          expect(stitched).to.be('');
+          done();
+        });
       });
 
-      it('should properly stitch for an existing version with selector array', function() {
-        var stitched = null;
-        myNoRemoteQuilt.stitch(["0"], "1.0.0", function(theString) { stitched = theString; });
-        expect(stitched).to.be('h\nc\n8\n0\nf\n');
+      it('should properly stitch for an existing version with selector array', function(done) {
+        myNoRemoteQuilt.stitch(["0"], "1.0.0", function(stitched) {
+          expect(stitched).to.be('h\nc\n8\n0\nf1.0.0\n');
+          done();
+        });
       });
 
-      it('should properly stitch for an existing version with selector function', function() {
-        var out = null;
-        myNoRemoteQuilt.stitch(function() { return true; }, "1.0.0", function(str) { out = str; });
-        expect(out).to.be('h\nc\n8\n0\n7\n9\n1\n2\n3\n4\n5\n6\nf\n');
+      it('should properly stitch for an existing version with selector function', function(done) {
+        myNoRemoteQuilt.stitch(function() { return true; }, "1.0.0", function(stitched) {
+          expect(stitched).to.be('h\nc\n8\n0\n7\n9\n1\n2\n3\n4\n5\n6\nf1.0.0\n');
+          done();
+        });
       });
 
-      // TODO[jigish] test remote!
+      it('should properly stitch for remote version with selector array', function(done) {
+        myQuilt.stitch(["0"], "2.0.0", function(stitched) {
+          expect(stitched).to.be('h\nc\n8\n0\nf2.0.0\n');
+          exec("rm -rf "+__dirname+"/fake_project/2.0.0", function(e, stdo, stde){});
+          done();
+        });
+      });
     });
   });
 });
