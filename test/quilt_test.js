@@ -64,6 +64,7 @@ describe('quilt', function() {
   describe('instance functions', function() {
     var myQuilt = null;
     var myNoRemoteQuilt = null;
+    var myBadRemoteQuilt = null;
     var server = null;
     before(function() {
       // fake server for remote requests
@@ -87,6 +88,14 @@ describe('quilt', function() {
         "local_path" : __dirname + "/fake_project",
         "remote_host" : "localhost",
         "remote_port" : 1337,
+        "remote_path" : "/"
+      }, noop, noop);
+
+      // bad remote enabled quilt
+      myBadRemoteQuilt = quilt.create({
+        "local_path" : __dirname + "/fake_project",
+        "remote_host" : "localhost",
+        "remote_port" : 1338,
         "remote_path" : "/"
       }, noop, noop);
 
@@ -403,6 +412,14 @@ describe('quilt', function() {
       it("should return null if remote version file is not a gzipped tar", function(done) {
         var version = {};
         myQuilt.getVersion('bad', function(theVersion) {
+          expect(theVersion).to.be(null);
+          done();
+        });
+      });
+
+      it("should return null if remote server doesn't exist", function(done) {
+        var version = {};
+        myBadRemoteQuilt.getVersion('something', function(theVersion) {
           expect(theVersion).to.be(null);
           done();
         });
